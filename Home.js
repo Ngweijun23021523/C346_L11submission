@@ -45,7 +45,7 @@ const Home = ({ navigation }) => {
             <View style={styles.listStyle}>
                 <Text style={styles.itemText}>Name: {item.name}</Text>
                 <Text style={styles.itemText}>Email: {item.Email}</Text>
-                <Text style={styles.itemText}>Phone Number: {item.phoneNumber}</Text>
+                <Text style={styles.itemText}>PhoneNumber: {item.phoneNumber}</Text>
             </View>
         );
     };
