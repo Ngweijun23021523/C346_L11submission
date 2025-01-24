@@ -1,78 +1,84 @@
-import React, { useState, useEffect } from "react";
-import { StatusBar, Button, FlatList, StyleSheet, Text, View } from "react-native";
+import React,{useState} from 'react';
+import { StatusBar, View, Button, Text, TextInput, Alert,StyleSheet } from 'react-native';
+
+const Add = ({navigation, route}) => {
+    const[name,setName] = useState("");
+    const[Email, setEmail] = useState("");
+    const[phoneNumber, setPhoneNumber] = useState("");
+
+    const handleSubmit = () => {
+
+        let mydata =JSON.parse(route.params.datastr);
+        const item = { name, Email , phoneNumber };
+        mydata.push(item);
+
+        fetch("https://jsonhost.com/json/b2dd09424dffefa21e4b786a02e31823",
+            {method:"POST",
+                headers: {
+                    'Content-Type':'application/json',
+                    "Authorization":"uvzqcjhp5igwfpr7snrj4enqmukvvjmn"
+                },
+                body:JSON.stringify(mydata)
+            }
+        )
+            .then((response)=>{
+                navigation.navigate('Home');
+            })
+    }
+
+    return (
+        <View>
+            <StatusBar/>
+            <Text style={styles.label}>Name:</Text>
+            <TextInput style={styles.input}  value={name} onChangeText={setName}
+                       placeholder="Enter name"/>
+
+            <Text style={styles.label}>Email:</Text>
+            <TextInput style={styles.input}  value={Email} onChangeText={setEmail}
+                       placeholder="Enter Email"/>
+
+            <Text style={styles.label}>Phone Number:</Text>
+            <TextInput style={styles.input}  value={phoneNumber}
+                       onChangeText={setPhoneNumber}
+                       placeholder="Enter name"/>
+
+            <Button title='Submit' onPress={handleSubmit}/>
+
+
+            <Button title= 'Go check' onPress={() => {navigation.navigate("Check")}}/>
+
+
+        </View>
+
+
+    );
+};
+
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#f9f9f9",
-        padding: 10,
+        padding: 20,
+        backgroundColor: "#f8f8f8",
     },
-    listStyle: {
-        backgroundColor: "#ffffff",
-        borderRadius: 10,
-        padding: 15,
-        marginVertical: 10,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
-        elevation: 3,
-    },
-    itemText: {
+    label: {
         fontSize: 16,
-        color: "#333",
         marginBottom: 5,
-    },
-    buttonStyle: {
-        backgroundColor: "yellow",
-        padding: 10,
-        borderRadius: 5,
-        alignItems: "center",
-        marginVertical: 10,
-    },
-    buttonText: {
-        color: "#fff",
-        fontSize: 16,
         fontWeight: "bold",
+        color: "#333",
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 15,
+        backgroundColor: "#fff",
+    },
+    buttonContainer: {
+        marginTop: 20,
     },
 });
+export default Add;
 
-const Home = ({ navigation }) => {
-    const [myData, setMyData] = useState([]);
-
-    const renderItem = ({ item }) => {
-        return (
-            <View style={styles.listStyle}>
-                <Text style={styles.itemText}>Name: {item.name}</Text>
-                <Text style={styles.itemText}>Email: {item.Email}</Text>
-                <Text style={styles.itemText}>PhoneNumber: {item.phoneNumber}</Text>
-            </View>
-        );
-    };
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetch("https://jsonhost.com/json/b2dd09424dffefa21e4b786a02e31823");
-            const data = await response.json();
-            setMyData(data);
-        };
-        fetchData();
-    }, []);
-
-    return (
-        <View style={styles.container}>
-            <StatusBar />
-            <View style={styles.buttonStyle}>
-                <Button title= 'register' onPress={
-                    ()=>{navigation.navigate("Add",{datastr:JSON.stringify(myData)})}}/>
-            </View>
-            <FlatList
-                data={myData}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => index.toString()}
-            />
-        </View>
-    );
-};
-
-export default Home;
+//test
